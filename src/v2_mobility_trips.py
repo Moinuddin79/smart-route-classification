@@ -20,11 +20,10 @@ per = c.groupby("trip_id").agg(
 per["duration_min"] = (per["end"] - per["start"]).dt.total_seconds() / 60
 
 # Distance: only pings not flagged as likely GPS noise, measured between matched route points
-clean = c[c["candidate_label"] != "likely_gps_noise"].copy()
-g = clean.groupby("trip_id", sort=False)
-clean["step_m"] = haversine_m(g["matched_lat"].shift(), g["matched_lon"].shift(),
-                              clean["matched_lat"], clean["matched_lon"])
-per["observed_distance_m"] = clean.groupby("trip_id")["step_m"].sum()
+along = pd.read_csv(ROOT / "outputs" / "v2" / "v2_map_matched_exact.csv",
+                    usecols=["trip_id", "ping_seq", "matched_along_m"])
+clean = c[c["candidate_label"] != "likely_gps_noise"].merge(along, on=["trip_id", "ping_seq"], how="left")
+per["observed_distance_m"] = clean.groupby("trip_id")["matched_along_m"].agg(lambda s: s.max() - s.min())
 
 meta = pd.read_csv(V2 / "trip_metadata_v2.csv")[
     ["trip_id", "route_short_name", "distance_m", "avg_speed_kmph",

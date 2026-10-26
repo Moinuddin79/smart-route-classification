@@ -82,7 +82,7 @@ All data is \*\*synthetic\*\* (generated from real BMTC GTFS route shapes). Noth
 
 3\. `python src\\v2\_reliability\_detector.py`
 
-4\. `python src\\v2\_mobility\_trips.py`  (NOTE: re-run needed, it was last run before the sequence-aware matcher)
+4\. `python src\\v2\_mobility\_trips.py` ( it was last run before the sequence-aware matcher)
 
 5\. `python src\\v2\_hotspots.py`
 
@@ -104,17 +104,16 @@ v1 pipeline: `map\_matching.py`, `gps\_reliability\_model.py`, `tune\_gps\_thres
 
 \- Original generator has hard-coded paths from the author's earlier environment.
 
-\- Observed v2 distance averages 1.7 percent below route length (worst trip 10.6 percent); cause not yet confirmed (likely missing pings at trip ends).
+- v2 observed distance is 0.6 percent below route length on average (worst trip 8.8 percent on a short route). Cause confirmed: the stretch before the first ping and after the last ping is not covered. Distance is measured along the route (matched_along_m); straight lines between pings cut corners and added a further 1.1 percent shortfall.
 
 
 
 \## Next steps
 
-1\. Re-run `v2\_mobility\_trips.py` with the final matcher; check the distance shortfall.
 
-2\. Phase 3 charts on v2 (delay by period, speed by route, section speed profiles).
+1\. Phase 3 charts on v2 (delay by period, speed by route, section speed profiles).
 
-3\. Phase 4: hotspot map, recurring problems, dashboard combining route classification, reliability, deviation detection and mobility.
+2\. Phase 4: hotspot map, recurring problems, dashboard combining route classification, reliability, deviation detection and mobility.
 
-4\. Phase 5: clearly labelled demo UI for live tracking (no real-time or ETA claims).
+3\. Phase 5: clearly labelled demo UI for live tracking (no real-time or ETA claims).
 
